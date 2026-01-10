@@ -262,12 +262,10 @@ plt.savefig('alpha_evolution.pdf')
 ## Citation
 
 ```bibtex
-@inproceedings{adaptivemixgnn2026,
+@misc{adaptivemixgnn2026,
   title={AdaptiveMixGNN: Filter Bank Graph Neural Networks with Learnable Frequency Mixing},
-  author={[Your Name]},
-  booktitle={GRaM Workshop @ ICLR},
-  year={2026},
-  note={Tiny Papers Track}
+  author={Miguel Alcocer and Javier Muñoz and Álvaro Morán},
+  note={Work in progress, intended for GRaM Workshop @ ICLR 2026}
 }
 ```
 
