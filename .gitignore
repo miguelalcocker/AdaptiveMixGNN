@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Entornos virtuales
+venv/
+.env/
+.venv/
+
+# Logs
+*.log
+
+# Resultados generados
+results/
+*.csv
+*.png
+*.pdf
+
+# Editor / Sistema
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

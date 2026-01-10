@@ -1,0 +1,31 @@
+# Core dependencies for AdaptiveMixGNN
+# GRaM @ ICLR 2026 Workshop Submission
+
+# Deep Learning
+torch>=2.0.0
+torchvision>=0.15.0
+torchaudio>=2.0.0
+
+# Graph Neural Networks
+torch-geometric>=2.3.0
+torch-scatter>=2.1.0
+torch-sparse>=0.6.16
+
+# Data Processing
+numpy>=1.24.0
+pandas>=2.0.0
+
+# Visualization
+matplotlib>=3.7.0
+seaborn>=0.12.0
+
+# Utilities
+tqdm>=4.65.0
+networkx>=3.0
+
+# Experiment Tracking (optional)
+wandb>=0.15.0
+
+# Development Tools (optional)
+jupyter>=1.0.0
+ipython>=8.12.0
