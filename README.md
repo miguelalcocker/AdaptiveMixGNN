@@ -124,18 +124,6 @@ python train_ref.py --dataset Cora --save_alpha_distribution --verbose
 
 Esto genera archivos CSV con los valores de α por nodo: `alpha_cora.csv`, `alpha_texas.csv`, etc.
 
-### Estudios de Ablación
-
-#### GCN Puro (α=1, solo paso-bajo)
-```bash
-python train_ref.py --dataset Cora --ablation_mode gcn
-```
-
-#### Paso-Alto Puro (α=0)
-```bash
-python train_ref.py --dataset Cora --ablation_mode hp
-```
-
 #### α Aprendido (por defecto)
 ```bash
 python train_ref.py --dataset Cora
@@ -263,7 +251,7 @@ plt.savefig('distribucion_alpha.pdf')
 ├── benchmark_runner.py         # Ejecución de benchmarks
 │   └── Genera tabla de resultados
 │
-└── README_ES.md                # Este archivo
+└── README.md                # Este archivo
 ```
 
 ## Referencias
