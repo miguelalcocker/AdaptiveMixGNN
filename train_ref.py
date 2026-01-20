@@ -5,7 +5,6 @@ Demonstrates complete usage including:
 - Model initialization with graph structure
 - Alpha evolution logging (for hypothesis validation)
 - Parameter counting (Simplicity criterion)
-- Ablation mode support (--ablation_mode gcn/hp)
 - Training loop with evaluation
 
 Workshop: GRaM @ ICLR 2026 (Tiny Papers Track)
@@ -329,9 +328,9 @@ def main():
                   f"{alpha_str}")
 
         # Early stopping
-        #if patience_counter >= args.patience and epoch > args.warmup_epochs:
-            #print(f"Early stopping at epoch {epoch}")
-            #break
+        if patience_counter >= args.patience and epoch > args.warmup_epochs:
+            print(f"Early stopping at epoch {epoch}")
+            break
 
     # Restore best model
     if best_state:
