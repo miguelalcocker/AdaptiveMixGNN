@@ -103,9 +103,7 @@ conda create -n adaptivemix python=3.10
 conda activate adaptivemix
 
 # Instalar dependencias
-pip install torch torchvision torchaudio
-pip install torch-geometric
-pip install torch-scatter torch-sparse -f https://data.pyg.org/whl/torch-2.0.0+cu118.html
+pip install requirements.txt
 ```
 
 ## Uso
