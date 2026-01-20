@@ -122,11 +122,6 @@ python train_ref.py --dataset Cora --save_alpha_distribution --verbose
 
 Esto genera archivos CSV con los valores de α por nodo: `alpha_cora.csv`, `alpha_texas.csv`, etc.
 
-#### α Aprendido (por defecto)
-```bash
-python train_ref.py --dataset Cora
-```
-
 ### Experimentos de Heterofilia
 
 ```bash
@@ -160,9 +155,6 @@ Entrenamiento:
 
 Dataset:
   --dataset           Elección de dataset: Cora, CiteSeer, Texas, Wisconsin (por defecto: Cora)
-
-Ablación:
-  --ablation_mode     Forzar α: 'gcn' (α=1), 'hp' (α=0), o None (aprendido)
 
 Logging:
   --save_alpha_distribution  Guardar distribución de α por nodo en CSV
