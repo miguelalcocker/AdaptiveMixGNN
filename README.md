@@ -161,30 +161,6 @@ Logging:
   --verbose                  Imprimir progreso detallado
 ```
 
-## Resultados
-
-### Precisión en Clasificación de Nodos
-
-| Dataset | Tipo | Precisión Test | Parámetros | α Promedio |
-|---------|------|----------------|------------|------------|
-| Cora | Homofílico | 79.04 ± 0.91% | 93,730 | 0.897 |
-| CiteSeer | Homofílico | 65.12 ± 7.92% | 241,215 | 0.842 |
-| Texas | Heterofílico | 81.08 ± 4.52% | 111,150 | 0.480 |
-| Wisconsin | Heterofílico | 79.61 ± 0.96% | 111,150 | 0.450 |
-
-### Validación de Hipótesis
-
-| Dataset | Tipo | α Esperado | α Observado | Estado |
-|---------|------|------------|-------------|--------|
-| Cora | Homofílico | α > 0.5 | 0.897 ± 0.027 | CONFIRMADO |
-| CiteSeer | Homofílico | α > 0.5 | 0.842 ± 0.175 | CONFIRMADO |
-| Texas | Heterofílico | α < 0.5 | 0.480 ± 0.029 | CONFIRMADO |
-| Wisconsin | Heterofílico | α < 0.5 | 0.450 ± 0.020 | CONFIRMADO |
-
-**Interpretación**:
-- α → 1 indica preferencia por filtrado paso-bajo (homofilia)
-- α → 0 indica preferencia por filtrado paso-alto (heterofilia)
-
 ## Análisis de Distribución de Alpha
 
 ### Visualización
