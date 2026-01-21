@@ -2,8 +2,6 @@
 
 Implementación de un modelo de clasificación de nodos basado en principios de Procesamiento de Señales en Grafos (GSP).
 
-Workshop: GRaM @ ICLR 2026 (Tiny Papers Track)
-
 ## Descripción General
 
 AdaptiveMixGNN aborda el desafío de la heterofilia en redes neuronales de grafos mediante una arquitectura de **Banco de Filtros** que procesa señales de baja frecuencia (homofílicas) y alta frecuencia (heterofílicas) por separado.
