@@ -23,7 +23,7 @@ import warnings
 warnings.filterwarnings('ignore')
 
 
-def plot_baselines_comparison(output_dir='figuras'):
+def plot_baselines_comparison(output_dir='figures'):
     """
     Genera grafico de barras comparando MLP, GCN, GAT, AdaptiveMixGNN.
 
@@ -105,7 +105,7 @@ def plot_baselines_comparison(output_dir='figuras'):
 
 
 def plot_alpha_distribution(cora_csv='alpha_cora.csv', texas_csv='alpha_texas.csv',
-                           output_dir='figuras'):
+                           output_dir='figures'):
     """
     Genera Figure 2: Distribucion de alpha comparando Cora vs Texas.
 
@@ -211,8 +211,8 @@ def parse_args():
                         help='Genera grafica de distribucion de alpha')
     parser.add_argument('--all', action='store_true',
                         help='Genera todas las figuras')
-    parser.add_argument('--output_dir', type=str, default='figuras',
-                        help='Directorio de salida (default: figuras)')
+    parser.add_argument('--output_dir', type=str, default='figures',
+                        help='Directorio de salida (default: figures)')
     return parser.parse_args()
 
 
