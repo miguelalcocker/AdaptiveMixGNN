@@ -1,211 +1,211 @@
-# AdaptiveMixGNN: Red Neuronal de Grafos con Banco de Filtros para Grafos Heterofílicos
+# AdaptiveMixGNN: Graph Neural Network with a Filter Bank for Heterophilic Graphs
 
-Implementación de un modelo de clasificación de nodos basado en principios de Procesamiento de Señales en Grafos (GSP).
+Implementation of a node-classification model based on principles from Graph Signal Processing (GSP).
 
-## Descripción General
+## Overview
 
-AdaptiveMixGNN aborda el desafío de la heterofilia en redes neuronales de grafos mediante una arquitectura de **Banco de Filtros** que procesa señales de baja frecuencia (homofílicas) y alta frecuencia (heterofílicas) por separado.
+AdaptiveMixGNN addresses the challenge of heterophily in graph neural networks through a **Filter Bank** architecture that processes low-frequency (homophilic) and high-frequency (heterophilic) signals.
 
-### Innovación Clave
+### Key Innovation
 
-El modelo aprende un **parámetro de mezcla α por nodo** α_i ∈ [0,1] que balancea adaptativamente:
-- **Filtro paso-bajo** (S_LP): Agrega información de vecinos similares (homofilia)
-- **Filtro paso-alto** (S_HP): Captura patrones de vecinos disimilares (heterofilia)
+The model learns a **node-wise mixing parameter α** (α_i ∈ [0,1]) that adaptively balances:
+- **Low-pass filter** (S_LP): aggregates information from similar neighbors (homophily)
+- **High-pass filter** (S_HP): captures patterns from dissimilar neighbors (heterophily)
 
-**Hipótesis**: α → 1 en grafos homofílicos, α → 0 en grafos heterofílicos
+**Hypothesis**: α → 1 in homophilic graphs, α → 0 in heterophilic graphs
 
-## Especificación Matemática
+## Mathematical Specification
 
-### Propagación de Señales
+### Signal Propagation
 
-Para cada capa l, la propagación de señales se define como:
+For each layer l, signal propagation is defined as:
 
-```
+```text
 z_LP = S_LP · X_{l-1}
 z_HP = S_HP · X_{l-1}
-α_i = σ(x_i · θ + b)           (por nodo)
+α_i = σ(x_i · θ + b)           (per node)
 z_mix = α ⊙ z_LP + (1-α) ⊙ z_HP
 X_l = σ(z_mix · W + bias)
 ```
 
-**Operadores de Desplazamiento de Grafo (GSOs):**
+**Graph Shift Operators (GSOs):**
 
-1. **GSO Paso-Bajo (S_LP)**: Adyacencia normalizada estilo GCN
-   ```
+1. **Low-pass GSO (S_LP)**: GCN-style normalized adjacency
+   ```text
    S_LP = D̃^(-1/2) · Ã · D̃^(-1/2)
-   donde Ã = A + I
+   where Ã = A + I
    ```
 
-2. **GSO Paso-Alto (S_HP)**: Filtro de diferencia espectral
-   ```
+2. **High-pass GSO (S_HP)**: spectral difference filter
+   ```text
    S_HP = I - S_LP
    ```
 
-## Instalación
+## Installation
 
 ```bash
-# Crear entorno
+# Create environment
 conda create -n adaptivemix python=3.10
 conda activate adaptivemix
 
-# Instalar dependencias
+# Install dependencies
 pip install -r requirements.txt
 ```
 
-## Uso
+## Usage
 
-### Entrenamiento Básico
+### Basic Training
 
 ```bash
 python train.py --dataset Cora --epochs 200 --verbose
 ```
 
-### Benchmark de AdaptiveMixGNN
+### AdaptiveMixGNN Benchmark
 
 ```bash
-# Solo nuestro modelo en todos los datasets
+# Only our model on all datasets
 python benchmark.py
 
-# Comparativa con baselines (MLP, GCN, GAT)
+# Comparison with baselines (MLP, GCN, GAT)
 python benchmark.py --baselines
 
-# Con mas ejecuciones para estadisticas
+# More runs for statistics
 python benchmark.py --baselines --runs 10
 ```
 
-### Generación de Figuras
+### Figure Generation
 
 ```bash
-# Grafico de barras comparando baselines
+# Bar plot comparing baselines
 python plot.py --baselines
 
-# Histogramas de distribucion de alpha (requiere CSVs)
+# Alpha distribution histograms (requires CSVs)
 python plot.py --alpha
 
-# Todas las figuras
+# All figures
 python plot.py --all
 ```
 
-### Extracción de Distribución de Alpha
+### Alpha Distribution Extraction
 
-Para generar los histogramas de alpha, primero hay que extraer los datos:
+To generate alpha histograms, you first need to extract the data:
 
 ```bash
-# Generar CSV para Cora
+# Generate CSV for Cora
 python train.py --dataset Cora --save_alpha_distribution --epochs 200
 mv alpha_distribution_results.csv alpha_cora.csv
 
-# Generar CSV para Texas
+# Generate CSV for Texas
 python train.py --dataset Texas --save_alpha_distribution --epochs 200
 mv alpha_distribution_results.csv alpha_texas.csv
 
-# Generar figura
+# Generate figure
 python plot.py --alpha
 ```
 
-## Argumentos de Línea de Comandos
+## Command-Line Arguments
 
 ### train.py
 
-```
-Arquitectura:
-  --hidden_dim        Dimensión de capa oculta (default: 64)
-  --num_layers        Número de capas GNN (default: 2)
-  --dropout           Tasa de dropout (default: 0.5)
+```text
+Architecture:
+  --hidden_dim        Hidden layer dimension (default: 64)
+  --num_layers        Number of GNN layers (default: 2)
+  --dropout           Dropout rate (default: 0.5)
 
-Entrenamiento:
-  --epochs            Épocas de entrenamiento (default: 200)
-  --lr                Tasa de aprendizaje (default: 0.01)
-  --weight_decay      Regularización L2 (default: 5e-4)
-  --patience          Paciencia para early stopping (default: 50)
-  --warmup_epochs     Épocas de warmup para α (default: 20)
+Training:
+  --epochs            Training epochs (default: 200)
+  --lr                Learning rate (default: 0.01)
+  --weight_decay      L2 regularization (default: 5e-4)
+  --patience          Early stopping patience (default: 50)
+  --warmup_epochs     Warmup epochs for α (default: 20)
 
 Dataset:
   --dataset           Cora, CiteSeer, Texas, Wisconsin, Cornell (default: Cora)
 
 Logging:
-  --save_alpha_distribution  Guardar distribución de α por nodo en CSV
-  --log_alpha               Guardar evolución de α por época
-  --verbose                 Imprimir progreso detallado
+  --save_alpha_distribution  Save node-wise α distribution to CSV
+  --log_alpha               Save α evolution per epoch
+  --verbose                 Print detailed progress
 ```
 
 ### benchmark.py
 
+```text
+  --baselines         Include comparison with MLP, GCN, GAT
+  --runs              Number of runs (default: 5)
+  --epochs            Epochs per run (default: 200)
 ```
-  --baselines         Incluir comparativa con MLP, GCN, GAT
-  --runs              Número de ejecuciones (default: 5)
-  --epochs            Épocas por ejecución (default: 200)
-```
 
-## Resultados
+## Results
 
-### Precisión en Clasificación de Nodos
+### Node Classification Accuracy
 
-| Dataset | Tipo | Precisión Test | α Promedio |
-|---------|------|----------------|------------|
-| Cora | Homofílico | 79.54 ± 0.33% | 0.897 |
-| CiteSeer | Homofílico | 68.14 ± 0.57% | 0.842 |
-| Texas | Heterofílico | 80.00 ± 1.32% | 0.480 |
-| Wisconsin | Heterofílico | 80.78 ± 0.78% | 0.450 |
+| Dataset | Type | Test Accuracy | Avg. α |
+|---------|------|---------------|--------|
+| Cora | Homophilic | 79.54 ± 0.33% | 0.897 |
+| CiteSeer | Homophilic | 68.14 ± 0.57% | 0.842 |
+| Texas | Heterophilic | 80.00 ± 1.32% | 0.480 |
+| Wisconsin | Heterophilic | 80.78 ± 0.78% | 0.450 |
 
-### Comparativa con Baselines
+### Baseline Comparison
 
-| Modelo | Cora | CiteSeer | Texas | Wisconsin |
+| Model | Cora | CiteSeer | Texas | Wisconsin |
 |--------|------|----------|-------|-----------|
 | MLP | 56.54 ± 1.02 | 57.10 ± 1.07 | 77.84 ± 1.08 | 79.22 ± 1.57 |
 | GCN | 81.22 ± 0.76 | 68.42 ± 0.52 | 62.70 ± 2.02 | 53.73 ± 2.00 |
 | GAT | 80.44 ± 1.07 | 67.72 ± 0.95 | 61.08 ± 5.82 | 51.76 ± 5.05 |
 | **AdaptiveMixGNN** | 79.54 ± 0.33 | 68.14 ± 0.57 | **80.00 ± 1.32** | **80.78 ± 0.78** |
 
-### Validación de Hipótesis
+### Hypothesis Validation
 
-| Dataset | Tipo | α Esperado | α Observado | Estado |
-|---------|------|------------|-------------|--------|
-| Cora | Homofílico | α > 0.5 | 0.897 | CONFIRMADO |
-| CiteSeer | Homofílico | α > 0.5 | 0.842 | CONFIRMADO |
-| Texas | Heterofílico | α < 0.5 | 0.480 | CONFIRMADO |
-| Wisconsin | Heterofílico | α < 0.5 | 0.450 | CONFIRMADO |
+| Dataset | Type | Expected α | Observed α | Status |
+|---------|------|------------|------------|--------|
+| Cora | Homophilic | α > 0.5 | 0.897 | CONFIRMED |
+| CiteSeer | Homophilic | α > 0.5 | 0.842 | CONFIRMED |
+| Texas | Heterophilic | α < 0.5 | 0.480 | CONFIRMED |
+| Wisconsin | Heterophilic | α < 0.5 | 0.450 | CONFIRMED |
 
-## Estructura del Código
+## Code Structure
 
-```
+```text
 .
-├── model.py           # Implementación de AdaptiveMixGNN
-│   ├── compute_graph_shift_operators()  # Pre-calcular S_LP, S_HP
-│   ├── AdaptiveMixGNNLayer              # Capa con mezcla α por nodo
-│   ├── AdaptiveMixGNN                   # Modelo completo
-│   └── get_optimizer()                  # Optimizador con LR diferenciado
+├── model.py           # AdaptiveMixGNN implementation
+│   ├── compute_graph_shift_operators()  # Pre-compute S_LP, S_HP
+│   ├── AdaptiveMixGNNLayer              # Layer with node-wise α mixing
+│   ├── AdaptiveMixGNN                   # Full model
+│   └── get_optimizer()                  # Optimizer with differentiated LR
 │
-├── train.py           # Script de entrenamiento
-│   ├── Carga de datasets (Planetoid, WebKB)
-│   ├── Training loop con early stopping
-│   └── Extracción de distribución de alpha
+├── train.py           # Training script
+│   ├── Dataset loading (Planetoid, WebKB)
+│   ├── Training loop with early stopping
+│   └── Alpha distribution extraction
 │
-├── benchmark.py       # Suite de benchmarks
-│   ├── run_benchmark_ours()      # Solo AdaptiveMixGNN
-│   └── run_benchmark_baselines() # Comparativa MLP/GCN/GAT
+├── benchmark.py       # Benchmark suite
+│   ├── run_benchmark_ours()      # AdaptiveMixGNN only
+│   └── run_benchmark_baselines() # MLP/GCN/GAT comparison
 │
-├── plot.py            # Generación de figuras
-│   ├── plot_baselines_comparison()  # Gráfico de barras
-│   └── plot_alpha_distribution()    # Histogramas de α
+├── plot.py            # Figure generation
+│   ├── plot_baselines_comparison()  # Bar chart
+│   └── plot_alpha_distribution()    # α histograms
 │
-├── figuras/           # Figuras generadas
-├── requirements.txt   # Dependencias
-└── README.md          # Este archivo
+├── figures/           # Generated figures
+├── requirements.txt   # Dependencies
+└── README.md          # This file
 ```
 
-## Referencias
+## References
 
-### Procesamiento de Señales en Grafos
+### Graph Signal Processing
 - Kipf & Welling (2017): Semi-Supervised Classification with GCNs
 - Sandryhaila & Moura (2013): Discrete Signal Processing on Graphs
 - Defferrard et al. (2016): Convolutional Neural Networks on Graphs
 
-### Heterofilia en GNNs
+### Heterophily in GNNs
 - Zhu et al. (2020): Beyond Homophily in Graph Neural Networks
 - Chien et al. (2021): Adaptive Universal Generalized PageRank GNN
 - Bo et al. (2021): Beyond Low-frequency Information in GCNs
 
-## Licencia
+## License
 
-Este código se proporciona con fines de investigación y educación.
+This code is provided for research and educational purposes.
